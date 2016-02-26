@@ -4,10 +4,15 @@
 #include "Lab3IO.h"
 #include <omp.h>
 
+#include "timer.h"
+
 #define TOL 0.0005
 
 int main(int argc, char * argv[]) {
 
+//Need to record time
+
+double start, end;
 
   int a_num_threads = atoi(argv[1]);
 
@@ -32,7 +37,7 @@ int main(int argc, char * argv[]) {
     X[0] = Au[0][1] / Au[0][0];
   } else {
 
-
+	GET_TIME(start)
 #pragma omp parallel for num_threads(a_num_threads) shared(Au) private(i, j, k)
     /*Gaussian elimination*/
     for(k = 0; k < size - 1; ++k) {
@@ -87,6 +92,10 @@ int main(int argc, char * argv[]) {
 
   }
 
+GET_TIME(end)
+
+  //Gotta write out the matrix somewhere so we can compare.
+  Lab3SaveOutput(X, size, end-start);
 
 
   DestroyVec(X);
