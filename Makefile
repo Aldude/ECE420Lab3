@@ -3,7 +3,7 @@ FILES = main.c Lab3IO.c
 OUT = main
 
 all:
-	gcc $(FILES) -o $(OUT) $(FLAGS)
+	gcc $(FILES) -g -o $(OUT) $(FLAGS)
 
 data:
 	gcc datagen.c Lab3IO.c -o datagen

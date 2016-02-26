@@ -14,7 +14,7 @@ int main(int argc, char * argv[]) {
   int i, j, k, size;
   double ** Au;
   double * X;
-  double temp, error, Xnorm;
+  double error, Xnorm;
   int * index;
 
   /*Load the datasize and verify it*/
@@ -33,13 +33,11 @@ int main(int argc, char * argv[]) {
   } else {
 
 
-#pragma omp parallel num_threads(a_num_threads)
-{
-
+#pragma omp parallel for num_threads(a_num_threads) shared(Au) private(i, j, k)
     /*Gaussian elimination*/
     for(k = 0; k < size - 1; ++k) {
       /*Pivoting*/
-      temp = 0;
+      double temp = 0;
 
       for(i = k, j = 0; i < size; ++i) {
 	if (temp < Au[index[i]][k] * Au[index[i]][k]){
@@ -59,23 +57,21 @@ int main(int argc, char * argv[]) {
       for(i = k + 1; i < size; ++i) {
 	temp = Au[index[i]][k] / Au[index[k]][k];
 
-# pragma omp critical
-{
+
 	for(j = k; j < size + 1; ++j) {
 	  Au[index[i]][j] -= Au[index[k]][j] * temp;
 	}
-} /* End Critical */
+
 
       }       
     }
-}
 
-#pragma omp parallel num_threads(a_num_threads)
-{
 
+#pragma omp parallel for num_threads(a_num_threads) shared(Au, X) private(i, j, k)
     /*Jordan elimination*/
     for(k = size - 1; k > 0; --k) {
       for(i = k - 1; i >= 0; --i) {
+	double temp = 0;
 	temp = Au[index[i]][k] / Au[index[k]][k];
 	Au[index[i]][k] -= temp * Au[index[k]][k];
 	Au[index[i]][size] -= temp * Au[index[k]][size];
@@ -83,17 +79,15 @@ int main(int argc, char * argv[]) {
     }
 
 
-	#pragma omp critical 
-	{
+
     /*solution*/
     for(k=0; k< size; ++k) {
       X[k] = Au[index[k]][size] / Au[index[k]][k];
     }
-	} /* End Critical */
 
   }
 
-}
+
 
   DestroyVec(X);
   DestroyMat(Au, size);
