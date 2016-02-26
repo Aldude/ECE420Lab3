@@ -24,7 +24,7 @@ int main(int argc, char* argv[])
 
 	/*Load the datasize and verify it*/
 	Lab3LoadInput(&Au, &size);
-	if ((fp = fopen("data_output","r")) == NULL){
+	if ((fp = fopen("data_input","r")) == NULL){
 		printf("Fail to open the result data file!\n");
 		return 2;
 	}
