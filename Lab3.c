@@ -25,6 +25,17 @@ int main(int argc, char* argv[])
 	int* index;
 	FILE* fp;
 
+   /* Start up MPI */
+   MPI_Init(NULL, NULL); 
+
+   /* Get the number of processes */
+   MPI_Comm_size(MPI_COMM_WORLD, &comm_sz); 
+
+   /* Get my rank among all the processes */
+   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank); 
+
+
+
 	/*Load the datasize and verify it*/
 	Lab3LoadInput(&Au, &size);
 	if ((fp = fopen("data_output","r")) == NULL){
