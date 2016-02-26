@@ -22,7 +22,7 @@ int main(int argc, char * argv[]) {
 
   /*Calculate the solution by serial code*/
   X = CreateVec(size);
-  index = malloc(size * sizeof(int));
+  index = (int*) malloc(size * sizeof(int));
 
   for(i = 0; i < size; ++i) {
     index[i] = i;
@@ -83,12 +83,13 @@ int main(int argc, char * argv[]) {
     }
 
 
-#pragma omp critical {
+	#pragma omp critical 
+	{
     /*solution*/
     for(k=0; k< size; ++k) {
       X[k] = Au[index[k]][size] / Au[index[k]][k];
     }
-} /* End Critical */
+	} /* End Critical */
 
   }
 
@@ -96,6 +97,8 @@ int main(int argc, char * argv[]) {
 
   DestroyVec(X);
   DestroyMat(Au, size);
-  free(index);
-  return 0;	
+
+  free((void*)index);
+
+  return 0;
 }

@@ -1,4 +1,4 @@
-FLAGS = -pthread
+FLAGS = -pthread -fopenmp
 FILES = main.c Lab3IO.c
 OUT = main
 
