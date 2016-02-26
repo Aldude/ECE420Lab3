@@ -38,7 +38,7 @@ double start, end;
   } else {
 
 	GET_TIME(start)
-#pragma omp parallel num_threads(a_num_threads) shared(Au) private(temp, i, j)
+#pragma omp parallel num_threads(a_num_threads) shared(Au) private(temp, i, j, k)
 {
     /*Gaussian elimination*/
     for(k = 0; k < size - 1; ++k) {
@@ -66,7 +66,6 @@ double start, end;
 
 
 	for(j = k; j < size + 1; ++j) {
-	  #pragma omp critical
 	  Au[index[i]][j] -= Au[index[k]][j] * temp;
 	}
 
@@ -76,7 +75,7 @@ double start, end;
 
 }
 
-#pragma omp parallel num_threads(a_num_threads) shared(Au, X) private(temp, i, j)
+#pragma omp parallel num_threads(a_num_threads) shared(Au, X) private(temp, i, j, k)
 {
     /*Jordan elimination*/
     for(k = size - 1; k > 0; --k) {
@@ -92,12 +91,13 @@ double start, end;
 
     /*solution*/
     for(k=0; k< size; ++k) {
-	# pragma omp critical
       X[k] = Au[index[k]][size] / Au[index[k]][k];
     }
 
-  }
-}
+} /* End Pragma */
+
+
+} /* END ELSE from waaaayy above */
 GET_TIME(end)
 
   //Gotta write out the matrix somewhere so we can compare.
