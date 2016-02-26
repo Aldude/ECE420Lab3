@@ -14,7 +14,6 @@ bigdata: data
 
 test:
 	gcc serialtester.c Lab3IO.c -o tester -lm
-	./main 2
 	./tester
 
 debug:
