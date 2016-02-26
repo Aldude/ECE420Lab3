@@ -1,4 +1,4 @@
-FLAGS = -pthread -fopenmp
+FLAGS = -pthread -fopenmp -lm
 FILES = main.c Lab3IO.c
 OUT = main
 
@@ -13,7 +13,7 @@ bigdata: data
 	./datagen -s 1000 -b 10 -p
 
 test:
-	gcc serialtester.c Lab3IO.c -o tester
+	gcc serialtester.c Lab3IO.c -o tester -lm
 	./tester
 
 debug:
