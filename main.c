@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "Lab3IO.h"
+#include <omp.h>
 
 #define TOL 0.0005
 
